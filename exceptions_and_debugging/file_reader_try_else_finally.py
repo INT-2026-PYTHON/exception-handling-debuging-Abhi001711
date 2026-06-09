@@ -124,3 +124,41 @@ Explanation:
 =================================================
 
 """
+import os
+
+def read_numbers(path):
+    lines_read = 0
+    numbers = []
+    
+    try:
+        with open(path, "r") as file:
+            for line in file:
+                numbers.append(float(line))
+                lines_read += 1
+    except FileNotFoundError:
+        return ("error", f"File not found: {path}", lines_read)
+    except PermissionError:
+        return ("error", "Permission denied", lines_read)
+    except ValueError:
+        return ("error", "Invalid number on a line", lines_read)
+    except Exception as e:
+        return ("error", f"Unexpected error: {e}", lines_read)
+    else:
+        total = sum(numbers)
+        return ("ok", total, lines_read)
+    finally:
+        print("Done reading")
+
+
+if __name__ == "__main__":
+    with open("good.txt", "w") as f:
+        f.write("10\n20\n30\n")
+    with open("bad.txt", "w") as f:
+        f.write("10\nABC\n30\n")
+
+    print(read_numbers("good.txt"))
+    print(read_numbers("missing.txt"))
+    print(read_numbers("bad.txt"))
+
+    os.remove("good.txt")
+    os.remove("bad.txt")
