@@ -137,3 +137,24 @@ Explanation:
 =================================================
 
 """
+def process_records_simple(records):
+    clean_records = []
+    error_log = []
+
+    for index, record in enumerate(records):
+        try:
+            name = record["name"]
+            age = int(record["age"])
+            score = float(record["score"])
+      
+            clean_records.append({
+                "name": name,
+                "age": age,
+                "score": score
+            })
+            
+        except Exception as e:
+            
+            error_log.append((index, type(e).__name__, str(e)))
+
+    return clean_records, error_log
